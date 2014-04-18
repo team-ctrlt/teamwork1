@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE struts-config PUBLIC
+          "-//Apache Software Foundation//DTD Struts Configuration 1.3//EN"
+          "http://struts.apache.org/dtds/struts-config_1_3.dtd">
+
+<struts-config>
+	<form-beans>
+		<form-bean name="BookSearchForm" type="jp.co.teamwork.BookSearchForm"/>
+	</form-beans>
+
+	<global-forwards>
+		<forward name="fail" path="/book_search.jsp"/>
+	</global-forwards>
+
+	<action-mappings>
+		<action path="/book-search"
+				type="jp.co.teamwork.BookSearchAction"
+				name="BookSearchForm"
+				scope="session">
+			<forward name="next" path="/book_search_result.jsp"/>
+			<!-->forward name="fail" path="/login.jsp"/-->
+		</action>
+	</action-mappings>
+
+	<message-resources parameter="resources.application" />
+
+</struts-config>
