@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import jp.co.teamwork.db.service.BookService;
+import jp.co.teamwork.service.BookService;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;

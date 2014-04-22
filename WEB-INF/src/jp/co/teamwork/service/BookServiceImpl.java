@@ -1,4 +1,4 @@
-package jp.co.teamwork.db.service;
+package jp.co.teamwork.service;
 
 import java.awt.print.Book;
 

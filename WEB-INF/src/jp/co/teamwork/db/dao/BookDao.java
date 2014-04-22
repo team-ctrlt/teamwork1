@@ -18,7 +18,7 @@ public abstract class BookDao {
 	 *
 	 * @return 書籍情報
 	 */
-	abstract protected List<BookInfo> select();
+	abstract List<BookInfo> select();
 
 	/**
 	 * 書籍名をキーに書籍情報を取得する。
@@ -27,11 +27,17 @@ public abstract class BookDao {
 	 */
 	public abstract List<BookInfo> selectByTitle(String title);
 
+	public abstract List<BookInfo> selectByAuthorName(String authorName);
+
+	public abstract List<BookInfo> selectByAuthorId(int isbn);
+
+	public abstract List<BookInfo> selectByPublisher(String publisher);
+
 	/**
 	 * コミットする。
 	 * @param conn
 	 */
-	protected void commit(Connection conn) {
+	public void commit(Connection conn) {
 		if (conn != null) {
 			try {
 				conn.commit();
@@ -47,7 +53,7 @@ public abstract class BookDao {
 	 *
 	 * @param conn
 	 */
-	protected void rollback(Connection conn) {
+	public void rollback(Connection conn) {
 		if (conn != null) {
 			try {
 				conn.rollback();
@@ -62,7 +68,7 @@ public abstract class BookDao {
 	 * コネクションをクローズする。
 	 * @param connection
 	 */
-	protected void close(Connection conn) {
+	public void close(Connection conn) {
 		try {
 			if (conn != null) {
 				conn.close();
@@ -77,7 +83,7 @@ public abstract class BookDao {
 	 * ステートメントをクローズする。
 	 * @param stmt
 	 */
-	protected void close(Statement stmt) {
+	public void close(Statement stmt) {
 		try {
 			if (stmt != null) {
 				stmt.close();
@@ -92,7 +98,7 @@ public abstract class BookDao {
 	 * リザルトセットをクローズする。
 	 * @param rs
 	 */
-	protected void close(ResultSet rs) {
+	public void close(ResultSet rs) {
 		try {
 			if (rs != null) {
 				rs.close();

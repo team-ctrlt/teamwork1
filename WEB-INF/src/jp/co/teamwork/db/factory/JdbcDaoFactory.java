@@ -29,16 +29,18 @@ public class JdbcDaoFactory implements DaoFactory {
 	 * DB との connection を取得する
 	 * @return conn 生成したコネクション
 	 */
-	private static Connection getConnection() {
+	private Connection getConnection() {
 
 		/** DB接続用 */
 		Connection conn = null;
+		/** JDBC ドライバのクラス名 */
+		String driverClassName = "org.sqlite.JDBC";
 		/** URL */
 		String url = "jdbc:sqlite:G:\\04.Software\\sqlite-shell-win32-x86-3080402\\sample.sqlite3";
 
 
 		try {
-			Class.forName("org.sqlite.JDBC");
+			Class.forName(driverClassName);
 			conn = DriverManager.getConnection(url);
 		}
 		catch (ClassNotFoundException ce) {
