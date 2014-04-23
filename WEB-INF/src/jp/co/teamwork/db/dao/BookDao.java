@@ -33,6 +33,8 @@ public abstract class BookDao {
 
 	public abstract List<BookInfo> selectByPublisher(String publisher);
 
+	public abstract List<BookInfo> selectBooks(String title, String authorName, String isbn, String publisher);
+
 	/**
 	 * コミットする。
 	 * @param conn

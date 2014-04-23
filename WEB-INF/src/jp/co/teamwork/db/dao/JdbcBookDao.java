@@ -17,9 +17,6 @@ public class JdbcBookDao extends BookDao {
 
 	/** DB 接続用 */
 	private Connection conn = null;
-	String driverClassName = "org.sqlite.JDBC";
-	/** URL */
-	String url = "jdbc:sqlite:G:\\04.Software\\sqlite-shell-win32-x86-3080402\\sample.sqlite3";
 
 	/**
 	 * コンストラクタ
@@ -48,7 +45,7 @@ public class JdbcBookDao extends BookDao {
 				book.setTitle(rs.getString("TITLE"));
 				book.setAuthorName(rs.getString("AUTHOR_NAME"));
 				book.setAuthorId(rs.getInt("AUTHOR_ID"));
-				book.setIsbn(rs.getInt("ISBN"));
+				book.setIsbn(rs.getString("ISBN"));
 				book.setPublisher(rs.getString("PUBLISHER"));
 				book.setPublishDate(rs.getString("PUBLISH_DATE"));
 
@@ -92,8 +89,11 @@ public class JdbcBookDao extends BookDao {
 			sql.append(" PUBLISH_DATE");
 			sql.append(" from");
 			sql.append(" BOOKS");
-			sql.append(" where ");
-			sql.append(" TITLE=?");
+			sql.append(" where");
+			sql.append(" TITLE = ?");
+
+			System.out.println(sql);
+			System.out.println(title);
 
 			stmt = conn.prepareStatement(sql.toString());
 			stmt.setString(1, title);
@@ -104,9 +104,11 @@ public class JdbcBookDao extends BookDao {
 				bookInfo.setTitle(rs.getString("TITLE"));
 				bookInfo.setAuthorName(rs.getString("AUTHOR_NAME"));
 				bookInfo.setAuthorId(rs.getInt("AUTHOR_ID"));
-				bookInfo.setIsbn(rs.getInt("ISBN"));
+				bookInfo.setIsbn(rs.getString("ISBN"));
 				bookInfo.setPublisher(rs.getString("PUBLISHER"));
 				bookInfo.setPublishDate(rs.getString("PUBLISH_DATE"));
+
+				System.out.println(bookInfo.getTitle());
 
 				listBookInfo.add(bookInfo);
 			}
@@ -146,6 +148,72 @@ public class JdbcBookDao extends BookDao {
 	@Override
 	public List<BookInfo> selectByPublisher(String publisher) {
 		return null;
+	}
+
+	@Override
+	public List<BookInfo> selectBooks(String title, String authorName, String isbn, String publisher) {
+		PreparedStatement stmt = null;
+		ResultSet rs = null;
+
+		BookInfo bookInfo = new BookInfo();
+		List<BookInfo> listBookInfo = new ArrayList<BookInfo>();
+
+		try {
+			StringBuffer sql = new StringBuffer();
+			sql.append("select");
+			sql.append(" TITLE,");
+			sql.append(" AUTHOR_NAME,");
+			sql.append(" AUTHOR_ID,");
+			sql.append(" ISBN,");
+			sql.append(" PUBLISHER,");
+			sql.append(" PUBLISH_DATE");
+			sql.append(" from");
+			sql.append(" BOOKS");
+			sql.append(" where");
+			sql.append(" TITLE like ?");
+			sql.append(" and AUTHOR_NAME like ?");
+			sql.append(" and ISBN like ?");
+			sql.append(" and PUBLISHER like ?");
+
+			System.out.println(sql);
+
+			stmt = conn.prepareStatement(sql.toString());
+			stmt.setString(1, "%" + title + "%");
+			stmt.setString(2, "%" + authorName + "%");
+			stmt.setString(3, "%" + isbn + "%");
+			stmt.setString(4, "%" + publisher + "%");
+
+			System.out.println(title);
+			System.out.println(authorName);
+			System.out.println(isbn);
+			System.out.println(publisher);
+
+			rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				bookInfo.setTitle(rs.getString("TITLE"));
+				bookInfo.setAuthorName(rs.getString("AUTHOR_NAME"));
+				bookInfo.setAuthorId(rs.getInt("AUTHOR_ID"));
+				bookInfo.setIsbn(rs.getString("ISBN"));
+				bookInfo.setPublisher(rs.getString("PUBLISHER"));
+				bookInfo.setPublishDate(rs.getString("PUBLISH_DATE"));
+
+				System.out.println(bookInfo.getTitle());
+
+				listBookInfo.add(bookInfo);
+			}
+		}
+		catch (SQLException e) {
+			rollback(conn);
+			e.printStackTrace();
+		}
+		finally {
+			close(rs);
+			close(stmt);
+			close(conn);
+		}
+
+		return listBookInfo;
 	}
 
 }

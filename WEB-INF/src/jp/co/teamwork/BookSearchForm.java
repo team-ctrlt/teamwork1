@@ -9,7 +9,7 @@ public class BookSearchForm extends ActionForm {
 	/** 著者名 */
 	private String authorName;
 	/** ISBN */
-	private int isbn;
+	private String isbn;
 	/** 出版社 */
 	private String publisher;
 
@@ -44,14 +44,14 @@ public class BookSearchForm extends ActionForm {
 	/**
 	 * @return isbn
 	 */
-	public int getIsbn() {
+	public String getIsbn() {
 		return isbn;
 	}
 
 	/**
 	 * @param isbn セットする isbn
 	 */
-	public void setIsbn(int isbn) {
+	public void setIsbn(String isbn) {
 		this.isbn = isbn;
 	}
 

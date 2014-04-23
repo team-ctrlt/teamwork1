@@ -4,9 +4,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
-import jp.co.teamwork.service.BookService;
+import jp.co.teamwork.service.BookServiceImpl;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -23,24 +22,23 @@ public class BookSearchAction extends Action {
 									HttpServletRequest request,
 									HttpServletResponse response) {
 
-		HttpSession session = request.getSession();
+//		HttpSession session = request.getSession();
 //		ActionMessages errors = new ActionMessages();
 
 		BookSearchForm bookSearchForm = (BookSearchForm) form;
 
-		String title = bookSearchForm.getTitle();
-		String authorName = bookSearchForm.getAuthorName();
-		int isbn = bookSearchForm.getIsbn();
-		String publisher = bookSearchForm.getPublisher();
+		BookServiceImpl bookService = new BookServiceImpl(1);
 
-		BookService bookService = new BookService(1);
+		List<BookInfo> resultList = null;
 
-		List<BookInfo> resultList = bookService.selectByTitle(title);
+		resultList = 	bookService.findBooks(bookSearchForm.getTitle(), bookSearchForm.getAuthorName(),
+												bookSearchForm.getIsbn(), bookSearchForm.getPublisher());
+		//resultList = bookService.selectByTitle(bookSearchForm.getTitle());
 
-		session.setAttribute("book_info", resultList);
+		//session.setAttribute("book_info", resultList);
+		request.setAttribute("book_info", resultList);
 
 		return (mapping.findForward("next"));
 
 	}
-
 }
