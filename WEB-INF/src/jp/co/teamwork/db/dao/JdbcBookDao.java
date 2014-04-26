@@ -155,7 +155,6 @@ public class JdbcBookDao extends BookDao {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 
-		BookInfo bookInfo = new BookInfo();
 		List<BookInfo> listBookInfo = new ArrayList<BookInfo>();
 
 		try {
@@ -175,8 +174,9 @@ public class JdbcBookDao extends BookDao {
 			sql.append(" and ISBN like ?");
 			sql.append(" and PUBLISHER like ?");
 
-			System.out.println(sql);
+//			System.out.println(sql);
 
+//			conn.setAutoCommit(false);
 			stmt = conn.prepareStatement(sql.toString());
 			stmt.setString(1, "%" + title + "%");
 			stmt.setString(2, "%" + authorName + "%");
@@ -191,6 +191,7 @@ public class JdbcBookDao extends BookDao {
 			rs = stmt.executeQuery();
 
 			while (rs.next()) {
+				BookInfo bookInfo = new BookInfo();
 				bookInfo.setTitle(rs.getString("TITLE"));
 				bookInfo.setAuthorName(rs.getString("AUTHOR_NAME"));
 				bookInfo.setAuthorId(rs.getInt("AUTHOR_ID"));
@@ -198,10 +199,17 @@ public class JdbcBookDao extends BookDao {
 				bookInfo.setPublisher(rs.getString("PUBLISHER"));
 				bookInfo.setPublishDate(rs.getString("PUBLISH_DATE"));
 
-				System.out.println(bookInfo.getTitle());
+				//System.out.println(bookInfo.getIsbn());
 
 				listBookInfo.add(bookInfo);
+
+				for (BookInfo bi : listBookInfo) {
+					System.out.println(bi.getTitle());
+					System.out.println(bi.getIsbn());
+				}
+				System.out.println();
 			}
+
 		}
 		catch (SQLException e) {
 			rollback(conn);
@@ -215,5 +223,4 @@ public class JdbcBookDao extends BookDao {
 
 		return listBookInfo;
 	}
-
 }
