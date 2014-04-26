@@ -43,34 +43,6 @@ public class JdbcPoolingBookDao extends BookDao {
 	 */
 	@Override
 	public List<BookInfo> selectByTitle(String title) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
-	}
-
-	/* (非 Javadoc)
-	 * @see jp.co.teamwork.db.dao.BookDao#selectByAuthorName(java.lang.String)
-	 */
-	@Override
-	public List<BookInfo> selectByAuthorName(String authorName) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
-	}
-
-	/* (非 Javadoc)
-	 * @see jp.co.teamwork.db.dao.BookDao#selectByAuthorId(int)
-	 */
-	@Override
-	public List<BookInfo> selectByAuthorId(int isbn) {
-		// TODO 自動生成されたメソッド・スタブ
-		return null;
-	}
-
-	/* (非 Javadoc)
-	 * @see jp.co.teamwork.db.dao.BookDao#selectByPublisher(java.lang.String)
-	 */
-	@Override
-	public List<BookInfo> selectByPublisher(String publisher) {
-		// TODO 自動生成されたメソッド・スタブ
 		return null;
 	}
 
@@ -78,32 +50,11 @@ public class JdbcPoolingBookDao extends BookDao {
 	public List<BookInfo> selectBooks(String title, String authorName, String isbn, String publisher) {
 		ResultSet rs = null;
 		PreparedStatement pstmt = null;
-//		Connection conn = null;
 
-		BookInfo bookInfo = new BookInfo();
 		List<BookInfo> listBookInfo = new ArrayList<BookInfo>();
 
 		try {
-			StringBuffer sql = new StringBuffer();
-			sql.append("select");
-			sql.append(" TITLE,");
-			sql.append(" AUTHOR_NAME,");
-			sql.append(" AUTHOR_ID,");
-			sql.append(" ISBN,");
-			sql.append(" PUBLISHER,");
-			sql.append(" PUBLISH_DATE");
-			sql.append(" from");
-			sql.append(" BOOKS");
-			sql.append(" where");
-			sql.append(" TITLE like ?");
-			sql.append(" and AUTHOR_NAME like ?");
-			sql.append(" and ISBN like ?");
-			sql.append(" and PUBLISHER like ?");
-
-//			conn = ds.getConnection();
-			pstmt = conn.prepareStatement(sql.toString());
-
-			pstmt = conn.prepareStatement(sql.toString());
+			pstmt = conn.prepareStatement(createSelectSql());
 			pstmt.setString(1, "%" + title + "%");
 			pstmt.setString(2, "%" + authorName + "%");
 			pstmt.setString(3, "%" + isbn + "%");
@@ -112,6 +63,7 @@ public class JdbcPoolingBookDao extends BookDao {
 			rs = pstmt.executeQuery();
 
 			while (rs.next()) {
+				BookInfo bookInfo = new BookInfo();
 				bookInfo.setTitle(rs.getString("TITLE"));
 				bookInfo.setAuthorName(rs.getString("AUTHOR_NAME"));
 				bookInfo.setAuthorId(rs.getInt("AUTHOR_ID"));
@@ -123,7 +75,6 @@ public class JdbcPoolingBookDao extends BookDao {
 
 				listBookInfo.add(bookInfo);
 			}
-
 
 		}
 		catch (SQLException e) {
@@ -138,5 +89,107 @@ public class JdbcPoolingBookDao extends BookDao {
 
 		return null;
 	}
+
+	@Override
+	public void updateBooks(String authorName, String authorId, String publisher, String isbn) {
+		PreparedStatement pstmt = null;
+
+		try {
+			pstmt = conn.prepareStatement(createUpdateSql());
+			pstmt.setString(1, "%" + authorName + "%");
+			pstmt.setString(2, "%" + isbn + "%");
+			pstmt.setString(3, "%" + publisher + "%");
+			pstmt.setString(4, "%" + isbn + "%");
+
+			int result = pstmt.executeUpdate();
+
+			if (result == 0) {
+				System.out.println("Error: Update is denny");
+			}
+		}
+		catch (SQLException e) {
+			rollback(conn);
+			e.printStackTrace();
+		}
+		finally {
+			close(pstmt);
+			close(conn);
+		}
+
+	}
+
+	@Override
+	public void deleteBooks(String isbn) {
+		PreparedStatement pstmt = null;
+
+		try {
+			pstmt = conn.prepareStatement(createDeleteSql());
+			pstmt.setString(1, "%" + isbn + "%");
+
+			int result = pstmt.executeUpdate();
+
+			if (result == 0) {
+				System.out.println("Error: Delete is denny");
+			}
+		}
+		catch (SQLException e) {
+			rollback(conn);
+			e.printStackTrace();
+		}
+		finally {
+			close(pstmt);
+			close(conn);
+		}
+	}
+
+	private String createSelectSql() {
+		StringBuffer sql = new StringBuffer();
+
+		sql.append("select");
+		sql.append(" TITLE,");
+		sql.append(" AUTHOR_NAME,");
+		sql.append(" AUTHOR_ID,");
+		sql.append(" ISBN,");
+		sql.append(" PUBLISHER,");
+		sql.append(" PUBLISH_DATE");
+		sql.append(" from");
+		sql.append(" BOOKS");
+		sql.append(" where");
+		sql.append(" TITLE like ?");
+		sql.append(" and AUTHOR_NAME like ?");
+		sql.append(" and ISBN like ?");
+		sql.append(" and PUBLISHER like ?");
+
+		return sql.toString();
+	}
+
+	private String createUpdateSql() {
+		StringBuffer sql = new StringBuffer();
+
+		sql.append("update");
+		sql.append(" BOOKS");
+		sql.append(" set");
+		sql.append(" authorName = ?,");
+		sql.append(" authorId = ?,");
+		sql.append(" publisher = ?");
+		sql.append(" where");
+		sql.append(" isbn = ?");
+
+		return sql.toString();
+	}
+
+	private String createDeleteSql() {
+		StringBuffer sql = new StringBuffer();
+
+		sql.append("delete");
+		sql.append(" from");
+		sql.append(" BOOKS");
+		sql.append(" where");
+		sql.append(" isbn = ?");
+
+		return sql.toString();
+	}
+
+
 
 }

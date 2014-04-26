@@ -126,30 +126,6 @@ public class JdbcBookDao extends BookDao {
 		return listBookInfo;
 	}
 
-	/* (非 Javadoc)
-	 * @see jp.co.teamwork.db.dao.BookDao#selectByAuthorName(java.lang.String)
-	 */
-	@Override
-	public List<BookInfo> selectByAuthorName(String authorName) {
-		return null;
-	}
-
-	/* (非 Javadoc)
-	 * @see jp.co.teamwork.db.dao.BookDao#selectByAuthorId(int)
-	 */
-	@Override
-	public List<BookInfo> selectByAuthorId(int isbn) {
-		return null;
-	}
-
-	/* (非 Javadoc)
-	 * @see jp.co.teamwork.db.dao.BookDao#selectByPublisher(java.lang.String)
-	 */
-	@Override
-	public List<BookInfo> selectByPublisher(String publisher) {
-		return null;
-	}
-
 	@Override
 	public List<BookInfo> selectBooks(String title, String authorName, String isbn, String publisher) {
 		PreparedStatement stmt = null;
@@ -222,5 +198,23 @@ public class JdbcBookDao extends BookDao {
 		}
 
 		return listBookInfo;
+	}
+
+	/* (非 Javadoc)
+	 * @see jp.co.teamwork.db.dao.BookDao#updateBooks(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
+	 */
+	@Override
+	public void updateBooks(String authorName, String authorId, String publisher, String isbn) {
+		// TODO 自動生成されたメソッド・スタブ
+
+	}
+
+	/* (非 Javadoc)
+	 * @see jp.co.teamwork.db.dao.BookDao#deleteBooks(java.lang.String)
+	 */
+	@Override
+	public void deleteBooks(String isbn) {
+		// TODO 自動生成されたメソッド・スタブ
+
 	}
 }

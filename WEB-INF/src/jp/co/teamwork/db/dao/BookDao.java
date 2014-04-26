@@ -27,15 +27,17 @@ public abstract class BookDao {
 	 */
 	public abstract List<BookInfo> selectByTitle(String title);
 
-	public abstract List<BookInfo> selectByAuthorName(String authorName);
+//	public abstract List<BookInfo> selectByAuthorName(String authorName);
 
-	public abstract List<BookInfo> selectByAuthorId(int isbn);
+//	public abstract List<BookInfo> selectByAuthorId(int isbn);
 
-	public abstract List<BookInfo> selectByPublisher(String publisher);
+//	public abstract List<BookInfo> selectByPublisher(String publisher);
 
 	public abstract List<BookInfo> selectBooks(String title, String authorName, String isbn, String publisher);
 
+	public abstract void updateBooks(String authorName, String authorId, String publisher, String isbn);
 
+	public abstract void deleteBooks(String isbn);
 
 	/**
 	 * コミットする。
